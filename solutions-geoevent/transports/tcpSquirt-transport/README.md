@@ -1,4 +1,4 @@
-﻿#TCP Squirt Transport
+#TCP Squirt Transport
 
 The TCP-Squirt transport provides an example of how to send TCP on demand. TCP Squirt is specifically designed for use with Cursor on Target Outbound connectors
 
@@ -19,12 +19,12 @@ The TCP-Squirt transport provides an example of how to send TCP on demand. TCP S
 
 ## Requirements
 
-* See common [solutions-geoevent-java requirements](../../../README.md#requirements)
+* See common [solutions-geoevent-java requirements](../../../../README.md#requirements)
 * There are no additional requirements for this project
 
 ## Building 
 
-* See the [solutions-geoevent-java instructions](../../../README.md#instructions) for general instructions on 
+* See the [solutions-geoevent-java instructions](../../../../README.md#instructions) for general instructions on 
     * verifying your Maven installation
     * setting the location of the GEP Server and GEP SDK repositories
     * and any other common required steps
@@ -41,11 +41,11 @@ The TCP-Squirt transport provides an example of how to send TCP on demand. TCP S
 
 ### Validating the Installation
  
-* See the [solutions-geoevent-java validation instructions](../../../README.md#validating-install).
+* See the [solutions-geoevent-java validation instructions](../../../../README.md#validating-install).
 
 ### Testing with Simulated Test Data
 
-* After Deploying TCP-Squirt and the CoT adapteropen GeoEvent Manager and browse to Site->Connectors.  You should see an output connector created for you called labeled Send Cursor on Target message
+* After Deploying TCP-Squirt and the CoT adapter open GeoEvent Manager and browse to Site->Connectors.  You should see an output connector created for you called labeled Send Cursor on Target message
 ![Image of create connector](doc/connector.png)
 * in GeoEvent Manager application, brouse to Services->Outputs
 * Click 'Add Output'

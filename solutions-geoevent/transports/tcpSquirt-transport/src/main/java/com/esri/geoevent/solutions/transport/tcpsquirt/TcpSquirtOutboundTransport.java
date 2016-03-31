@@ -52,6 +52,11 @@ public class TcpSquirtOutboundTransport extends OutboundTransportBase implements
 	}
 	Integer activity = 0;
 	
+	/*@Override
+	public boolean isClusterable()
+	{
+		return false;
+	}*/
 	//@Override
 	public void start() throws RunningException {
 		switch (getRunningState())

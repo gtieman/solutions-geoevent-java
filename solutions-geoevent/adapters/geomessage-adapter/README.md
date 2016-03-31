@@ -1,16 +1,16 @@
-# geomessage-adapter
+# GeoMessage Adapter
 
-The geomessage-adapter provides an example of an adapter that can receive and send XML messages in a simple geomessage format.  This geomessage format is an XML format for use with [Esri military features](http://resources.arcgis.com/en/help/main/10.2/index.html#//000n0000000p000000)
+The GeoMessage Adapter provides an example of an adapter that can receive and send XML messages in a simple GeoMessage format.  This GeoMessage format is an XML format for use with [Esri military features](http://resources.arcgis.com/en/help/main/10.2/index.html#//000n0000000p000000)
  and corresponds to the format used by the [ArcGIS Runtime Message Processor](https://developers.arcgis.com/en/java/api-reference/com/esri/core/symbol/advanced/MessageProcessor.html).
 
 ![Image of geomessage-adapter](ScreenShot.png)
 
 ## Features
 
-* Sends and receives XML messages in a geomessage format
-* Converts message types received using available GEP GeoEvent Processor definitions
-* The "_type" element of the message is used to look up an existing geoevent definition
-* Here are example of some of these definitions:
+* Sends and receives XML messages in a GeoMessage format.
+* Converts message types received using available GeoEvent Definitions.
+* The "_type" element of the message is used to look up an existing Geoevent Definition.
+* Below are examples of the GeoEvent Definitions:
 
 Definition | Purpose 
 --- | ---
@@ -41,7 +41,7 @@ chemlight | To create chemlights reports
 
 * See the [solutions-geoevent-java instructions](../../../README.md#instructions) for general instructions on 
     * verifying your Maven installation
-    * setting the location of the GEP Server and GEP SDK repositories
+    * setting the location of the GeoEvent Processor and GeoEvent Processor SDK repositories
     * and any other common required steps
  * Open a command prompt and navigate to `solutions-geoevent-java/solutions-geoevent/adapters/geomessage-adapter`
 * Enter `mvn install` at the prompt
@@ -50,18 +50,18 @@ chemlight | To create chemlights reports
 
 * Install the adapter
     * Browse to `solutions-geoevent-java/solutions-geoevent/adapters/geomessage-adapter/target` (this directory is created when you execute mvn install).
-    * Copy the geomessage-adapter-{version}.jar file and paste it into the deploy directory on your GeoEvent server (<GEP install location>\deploy\ -- default location is C:\Program Files\ArcGIS\Server\GeoEventProcessor\deploy)
-* Check the existing geoevent definitions
-    *  Open the GeoEvent Processor Manager web application.
-    *  Navigate to ‘Site’ > ‘GeoEvent Processor’ > ‘GeoEvent Definitions’ 
-    *  Confirm that the following GEP geoevent definitions are available
+    * Copy the geomessage-adapter-{version}.jar file and paste it into the deploy folder in the GeoEvent Processor install directory ([GeoEvent Processor install location]\deploy\ -- default location is C:\Program Files\ArcGIS\Server\GeoEventProcessor\deploy).
+* Check for existing GeoEvent Definitions.
+    *  Open GeoEvent Processor Manager.
+    *  Navigate to ‘Site’ > ‘GeoEvent Processor’ > ‘GeoEvent Definitions’.
+    *  Confirm the following GeoEvent Definitions are available.
 
 ![Image of geoeventdefinition](doc/geoeventdefinitions.png)
 
-* If these definitions are not available, do the following to install these definitions
-    *  Navigate to ‘Site’ > ‘GeoEvent Processor’ > ‘Configuration Store’ and click ‘Import Configuration’
+* If these GeoEvent Definitions are not available, do the following to create these GeoEvent Definitions.
+    *  Navigate to ‘Site’ > ‘GeoEvent Processor’ > ‘Configuration Store’ and click ‘Import Configuration’.
     *  Browse to `solutions-geoevent-java\data\configurations` and locate the `GeoEventDefinitions-GeoMessageAdapter.xml` configuration file. This file is located [here](../../../data/configurations/GeoEventDefinitions-GeoMessageAdapter.xml).
-    *  On the GeoEvent Processor’s Import Configuration panel, click Import.
+    *  On the Import Configuration dialog, click Import.
 
 ## Testing
 
@@ -71,31 +71,31 @@ chemlight | To create chemlights reports
 
 ### Testing with Live Data
 
-* Download and build an application that can send simulated geomessages over UDP
-    * A sample UDP geomessage simulation application is available with the [Vehicle Commander repository](https://github.com/Esri/vehicle-commander/tree/master/source/MessageSimulator)
-    * A pre-built version of this project is included [here](../../../data/utilities/UDPGeoMessageSimulator)
-    * A sample simulation file, SimpleGeoMessage.xml, is provided [here](../../../data/simulation_files)
-* In the following steps you will configure GEP to receive and process simulated geomessage data
-* Open the GEP Manager web application
-* Create a connector to receive UDP data
-    * Navigate to ‘Site’ > ‘GeoEvent Processor’ > 'Connectors'
-    * Select Create Connector and configure as shown
+* Download and build an application that can send simulated GeoMessages over UDP.
+    * A sample UDP GeoMessage simulation application is available with the [GeoMessage Simulator (QT)](https://github.com/Esri/geomessage-simulator-qt).
+    * A pre-built version of this project is included [here](../../../data/utilities/UDPGeoMessageSimulator).
+    * A sample simulation file, SimpleGeoMessage.xml, is provided [here](../../../data/simulation_files).
+* In the following steps you will configure GeoEvent Processor to receive and process simulated GeoMessage data.
+* Open GeoEvent Processor Manager.
+* Create a connector to receive UDP data.
+    * Navigate to ‘Site’ > ‘GeoEvent Processor’ > 'Connectors'.
+    * Select 'Create Connector' and configure as shown.
 
 ![Image of create connector](doc/create-connector.png)
 
-* Next use the GEP Manager and Service Designer to
-    * Create an Input to receive geomessage data using the created connector 
-    * Create an Output to observe received data
-    * Create a simple service to direct the Input data to the Output
-    * An example of a simple service is shown below 
+* Next use GeoEvent Processor Manager to:
+    * Create an Input Connector to receive GeoMessage data using the connector created above. 
+    * Create an Output Connector to observe received data.
+    * Create a simple GeoEvent Service to direct the input data to the output.
+    * An example of a simple GeoEvent Service is illustrated below. 
 
 ![Image of service](doc/service.png)
 
-* Navigate to ‘Services’ > ‘Monitor’ and observe that you have a configuration similar to the following (note: your names/outputs may differ)
+* In GeoEvent Processor Manager, navigate to ‘Services’ > ‘Monitor’ and observe the GeoEvent Processor components, they should be similar to the illustration below (note: your names/outputs may differ).
 
 ![Image of monitor](doc/monitor.png)
 
-* Start the UDP geomessage simulator and observe that the values increase on the monitor and the selected outputs are updated.
+* Start the UDP GeoMessage simulator and observe the values increase on the 'Monitor' page and the selected outputs are updated.
 
 ## Licensing
 

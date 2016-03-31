@@ -1,4 +1,5 @@
 /*
+ /*
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,25 +16,29 @@
  */
 package com.esri.geoevent.solutions.processor.symbollookup;
 
+// TODO: PUT BACK IN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//package com.esri.geoevent.solutions.processor.symbollookup;
+// TODO: PUT BACK IN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.esri.core.symbol.advanced.SymbolDictionary;
-import com.esri.core.symbol.advanced.SymbolDictionary.DictionaryType;
-import com.esri.core.symbol.advanced.SymbolProperties;
-
 public class SymbolLookup {
 
 	public static String NOT_FOUND = "NOT FOUND"; 
-	private static Map<String,SymbolProperties> sidc2SymbolProps = new HashMap<String,SymbolProperties>();
-	private static Map<String,SymbolProperties> symbolName2SymbolProps = new HashMap<String,SymbolProperties>();
+	private static Map<String, MilitarySymbol> sidc2SymbolProps = new HashMap<String, MilitarySymbol>();
+	private static Map<String, MilitarySymbol> symbolName2SymbolProps = new HashMap<String, MilitarySymbol>();
 	private static boolean initialized = false;
-	
-	private static SymbolDictionary sd = null; 
-	
-	private List<SymbolProperties> symbols; 
+		
+	private static List<MilitarySymbol> symbolList = new ArrayList<MilitarySymbol>(); 
 	
 	public SymbolLookup() 
 	{
@@ -49,30 +54,46 @@ public class SymbolLookup {
 		initialized = true;
 		
 		System.out.println("Initializing SymbolLookup");
-		
-		sd = new SymbolDictionary(DictionaryType.Mil2525C);	
-		
+				
 		try {
-			symbols = sd.findSymbols(null, null);
+// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO: figure out where this file is deployed:	
 			
-			for(SymbolProperties s : symbols )
+			InputStream csvFile = getClass().getResourceAsStream("/SymbolInfo2525C.csv") ;
+// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			
+			
+	            
+			BufferedReader br = new BufferedReader(new InputStreamReader(csvFile));	
+			String line = "";
+			String splitBy = ",";		 
+		 		 	
+			while ((line = br.readLine()) != null) {
+				 
+				String[] fields = line.split(splitBy);
+	 
+				if (fields.length < 5)
+					continue;
+				
+				String name = fields[0];
+				String sidc = fields[1];
+				String geometryType = fields[4];
+
+				MilitarySymbol newSymbol = new MilitarySymbol(name, sidc, geometryType);
+
+				if (newSymbol.isValidSymbol()) {
+					symbolList.add(newSymbol);
+				}	 
+			}
+	 
+			br.close();
+			
+			for (MilitarySymbol s : symbolList )
             {
                 String name = s.getName();
+                              
+                String symbolId = s.getSymbolId();
                 
-                try 
-                {
-                	if ((s == null) || (name == null) || name.isEmpty() || !(s.getValues().containsKey("SymbolID")))
-                		continue;                
-                }
-                catch (Exception ex) {
-        			// Should not happen
-        			ex.printStackTrace();
-        		}                
-
-                String symbolId = s.getValues().get("SymbolID").replace('*','-');
-                
-                // TODO: figure out where Java Runtime put geometry property/attribute
-                // we may have to use this one if it is not exposed
                 // @SuppressWarnings("unused")
 				// String geoType = s.getValues().get("GeometryConversionType");
 
@@ -81,13 +102,13 @@ public class SymbolLookup {
                 	sidc2SymbolProps.put(symbolId.toUpperCase(), s);
                 // TODO: decide if a warning should be issued for these repeats 
                 // else
-                //	System.out.println(symbolId + " - aleady in table, can't add");                 
+                //	System.out.println(symbolId + " - already in table, can't add");                 
                 
                 if (!symbolName2SymbolProps.containsKey(name))
                 	symbolName2SymbolProps.put(name.toUpperCase(), s);
                 // TODO: decide if a warning should be issued for these repeats 
                 // else
-                //	System.out.println(name + " - aleady in table, can't add");                                
+                //	System.out.println(name + " - already in table, can't add");                                
 
                 // To see symbols list/table:
                 // System.out.println(name + ":" + symbolId + ":" + geoType);
@@ -123,7 +144,7 @@ public class SymbolLookup {
         	}
         }
         
-        SymbolProperties sp = sidc2SymbolProps.get(maskedSymbolId);
+        MilitarySymbol sp = sidc2SymbolProps.get(maskedSymbolId);
         
         if (sp == null) // should not happen
         	return symbolName;
@@ -160,12 +181,12 @@ public class SymbolLookup {
 	        	}
 	        }
 	        
-	        SymbolProperties sp = symbolName2SymbolProps.get(lookupSymbolName);
+	        MilitarySymbol sp = symbolName2SymbolProps.get(lookupSymbolName);
 	        
 	        if (sp == null) // should not happen
 	        	return symbolId;
 	        
-	        symbolId = sp.getValues().get("SymbolID").replace('*','-');
+	        symbolId = sp.getSymbolId();
 		}
 		catch (Exception ex)
 		{

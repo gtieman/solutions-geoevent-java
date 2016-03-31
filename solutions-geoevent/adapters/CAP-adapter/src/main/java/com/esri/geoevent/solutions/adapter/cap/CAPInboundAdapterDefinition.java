@@ -57,19 +57,19 @@ public class CAPInboundAdapterDefinition extends AdapterDefinitionBase
 	@Override
     public String getLabel()
     {
-      return "CAP Inbound Adapter";
+      return "${com.esri.geoevent.solutions.adapter.cap.cap-adapter.ADAPTER_LABEL}";
     }
 	
 	@Override
 	public String getDomain()
 	{
-		return "com.esri.ges.solutions.adapter.cap";
+		return "com.esri.geoevent.solutions.adapter.cap";
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return "Common Alerting Protocol(CAP) adapter.";
+		return "${com.esri.geoevent.solutions.adapter.cap.cap-adapter.ADAPTER_DESCRIPTION}";
 	}
 
 	@Override

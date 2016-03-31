@@ -46,10 +46,10 @@ import com.esri.ges.core.property.PropertyDefinition;
 import com.esri.ges.core.property.PropertyException;
 import com.esri.ges.core.property.PropertyType;
 import com.esri.ges.manager.geoeventdefinition.GeoEventDefinitionManager;
-import com.esri.ges.spatial.Spatial;
+
 
 public class CoTInboundAdapterDefinition extends AdapterDefinitionBase {
-	Spatial spatial;
+	
 	String guid;
 	GeoEventDefinitionManager geoEventDefManager;
 	private ArrayList<CoTDetailsDeff> dynamicMessageAttributes;
@@ -58,14 +58,20 @@ public class CoTInboundAdapterDefinition extends AdapterDefinitionBase {
 	public static final String COT_TYPES_PATH_LABEL = "CoT_Types_Path";
 	public static final String XSD_PATH_LABEL = "XSD_Path";
 	public static final String MAXIMUM_BUFFER_SIZE_LABEL = "Max_Buffer_Size";
+	public static final String lblCotTypes = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.LBL_COT_TYPES}";
+	public static final String descCotTypes = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.DESC_COT_TYPES}";
+	public static final String lblXSDPath = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.LBL_XSD_PATH}";
+	public static final String descXSDPath = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.DESC_XSD_PATH}";
+	public static final String lblMaxBuffer = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.LBL_MAX_BUFFER_SIZE}";
+	public static final String descMaxBuffer = "${com.esri.geoevent.solutions.adapter.cot.cot-adapter.DESC_MAX_BUFFER_SIZE}";
 	public CoTInboundAdapterDefinition(AdapterType type) {
 		super(AdapterType.INBOUND);
 		try {
 			try
 			{
-				propertyDefinitions.put(COT_TYPES_PATH_LABEL, new PropertyDefinition(COT_TYPES_PATH_LABEL, PropertyType.String, "", "CoT_Types_Path", "This is the complete path for the cot types file.", false, false) );
-				propertyDefinitions.put(XSD_PATH_LABEL, new PropertyDefinition(XSD_PATH_LABEL, PropertyType.String, "", "XSD_Path", "This directory is where additional xsd files can be installed.  When the Adapter is installed, any xsd files found in this folder are used to add schema elements to the CoT GeoEvent Definition.", false, false ) );
-				propertyDefinitions.put(MAXIMUM_BUFFER_SIZE_LABEL, new PropertyDefinition(MAXIMUM_BUFFER_SIZE_LABEL, PropertyType.Integer, ""+(1024*1024), "Maximum Buffer Size", "This is the maximum number of XML characters that will be stored in memory while looking for a complete Cursor on Target message.  If the adapter receives more than this amount of text, it will assume that it has somehow missed the end of the message, and it will scan for something that looks like the beginning of a new message.", false, false ) );
+				propertyDefinitions.put(COT_TYPES_PATH_LABEL, new PropertyDefinition(COT_TYPES_PATH_LABEL, PropertyType.String, "", lblCotTypes, descCotTypes, false, false) );
+				propertyDefinitions.put(XSD_PATH_LABEL, new PropertyDefinition(XSD_PATH_LABEL, PropertyType.String, "", lblXSDPath, descXSDPath, false, false ) );
+				propertyDefinitions.put(MAXIMUM_BUFFER_SIZE_LABEL, new PropertyDefinition(MAXIMUM_BUFFER_SIZE_LABEL, PropertyType.Integer, ""+(1024*1024), lblMaxBuffer, descMaxBuffer, false, false ) );
 				
 			} catch (PropertyException e)
 			{

@@ -45,5 +45,6 @@ public class SymbolIdToNameProcessorService extends GeoEventProcessorServiceBase
 		
 	SymbolIdToNameProcessorDefinition sid2NameDef = (SymbolIdToNameProcessorDefinition)definition;
 	sid2NameDef.setManager(manager);
+
   }  
 }

@@ -39,59 +39,31 @@ public class SymbolIdToNameProcessorDefinition extends GeoEventProcessorDefiniti
 	public void setManager(GeoEventDefinitionManager m) throws PropertyException {
 		this.manager = m;
 		
-		PropertyDefinition procSymbolIdSource = new PropertyDefinition("symbolIdSource", 
+		/*PropertyDefinition procSymbolIdSource = new PropertyDefinition("symbolIdSource", 
 				PropertyType.String, "", "SymbolId Source", "Source of SymbolId Value", true, false);
 		procSymbolIdSource.addAllowedValue("Event");
-		propertyDefinitions.put(procSymbolIdSource.getPropertyName(), procSymbolIdSource);
+		propertyDefinitions.put(procSymbolIdSource.getPropertyName(), procSymbolIdSource);*/
 		
 		PropertyDefinition procSymbolIdEvent = new PropertyDefinition("symbolIdEvent", 
-				PropertyType.String, "", "SymbolId Event Field", "Geoevent field containing SymbolId data", true, false);
-		procSymbolIdEvent.setDependsOn("symbolIdSource=Event");
-		SetGeoEventAllowedFields(procSymbolIdEvent);
+		PropertyType.String, "", "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.LBL_SYMBOL_ID_FIELD}", "${com.esri.geoevent.solutions.processor.geomessage.geomessage-processor.DESC_SYMBOL_ID_FIELD}", true, false);
+		//procSymbolIdEvent.setDependsOn("symbolIdSource=Event");
+
 		propertyDefinitions.put(procSymbolIdEvent.getPropertyName(), procSymbolIdEvent);
 		
-		PropertyDefinition procSymbolNameSource = new PropertyDefinition("symbolNameSource", 
+		/*PropertyDefinition procSymbolNameSource = new PropertyDefinition("symbolNameSource", 
 				PropertyType.String, "", "SymbolName Source", "Source of SymbolName Value", true, false);
 		procSymbolNameSource.addAllowedValue("Event");
-		propertyDefinitions.put(procSymbolNameSource.getPropertyName(), procSymbolNameSource);
+		propertyDefinitions.put(procSymbolNameSource.getPropertyName(), procSymbolNameSource);*/
 		
 		PropertyDefinition procSymbolNameEvent = new PropertyDefinition("symbolNameEvent", 
-				PropertyType.String, "", "SymbolName Event Field", "Geoevent field containing SymbolName data", true, false);
-		procSymbolNameEvent.setDependsOn("symbolNameSource=Event");
-		SetGeoEventAllowedFields(procSymbolNameEvent);
+				PropertyType.String, "", "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.LBL_SYMBOL_NAME_FIELD}", "${com.esri.geoevent.solutions.processor.geomessage.geomessage-processor.DESC_SYMBOL_NAME_FIELD}", true, false);
+		//procSymbolNameEvent.setDependsOn("symbolNameSource=Event");
+
 		propertyDefinitions.put(procSymbolNameEvent.getPropertyName(), procSymbolNameEvent);
 		
 	}
 	
-	private void SetGeoEventAllowedFields(PropertyDefinition pd)
-	{
-		if (this.manager == null)
-			return;
-		
-		Collection<GeoEventDefinition> geodefs = this.manager.listAllGeoEventDefinitions();
-		if (geodefs == null)
-			return;
-		
-		Iterator<GeoEventDefinition> it = geodefs.iterator();
-		GeoEventDefinition geoEventDef;
-		while (it.hasNext())
-		{
-			geoEventDef = it.next();
-			String defName = geoEventDef.getName();
-			List<FieldDefinition> fieldDefs = geoEventDef.getFieldDefinitions();
-			
-			if (fieldDefs != null)
-			{
-				int fieldDefSize = fieldDefs.size();
-			
-				for(int i = 0; i < fieldDefSize; ++i)
-				{
-					String fld = geoEventDef.getFieldDefinitions().get(i).getName();
-					pd.addAllowedValue(defName + ":" + fld);
-				}
-			}
-		}
-	}
+	
 	
 	@Override
 	public String getName()
@@ -102,25 +74,25 @@ public class SymbolIdToNameProcessorDefinition extends GeoEventProcessorDefiniti
 	@Override
 	public String getDomain()
 	{
-		return "com.esri.geoevent.solutions.processor.symbollookup";
+		return "com.esri.geoevent.solutions.processor.symbol-lookup";
 	}
 
 	@Override
 	public String getVersion()
 	{
-		return "10.2.0";
+		return "10.4.0";
 	}
 
 	@Override
 	public String getLabel()
 	{
-		return "Symbol Id To Name Processor";
+		return "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.SYMBOL_TO_NAME_PROCESSOR_LABEL}";
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return "Converts Symbol ID Codes (SIDCs) to well known symbol names.";
+		return "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.SYMBOL_TO_NAME_PROCESSOR_DESCRIPTION}";
 	}
 
 	@Override

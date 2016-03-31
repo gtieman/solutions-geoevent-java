@@ -24,6 +24,7 @@ package com.esri.geoevent.solutions.adapter.cot;
  */
 
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -53,6 +54,7 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -61,6 +63,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.esri.core.geometry.GeometryEngine;
+import com.esri.core.geometry.MapGeometry;
+import com.esri.core.geometry.SpatialReference;
 import com.esri.ges.adapter.AdapterDefinition;
 import com.esri.ges.adapter.InboundAdapterBase;
 import com.esri.ges.core.ConfigurationException;
@@ -74,7 +79,6 @@ import com.esri.ges.core.geoevent.GeoEventDefinition;
 import com.esri.ges.core.property.Property;
 import com.esri.ges.manager.geoeventdefinition.GeoEventDefinitionManagerException;
 import com.esri.ges.messaging.MessagingException;
-import com.esri.ges.spatial.Geometry;
 
 public class CoTAdapterInbound extends InboundAdapterBase {
 	private static final Log log = LogFactory.getLog(CoTAdapterInbound.class);
@@ -205,6 +209,7 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 				return;
 			byte[] bytes = new byte[remaining];
 			bb.get(bytes);
+			
 			saxParser.parse(new ByteArrayInputStream(bytes), messageParser);
 			bytes = null;
 		} catch (SAXException e) {
@@ -369,8 +374,8 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 
 			if (points.getLength() > 0) {
 				Element pointElement = (Element) points.item(0);
-				Geometry geom = createGeometry(pointElement);
-				msg.setField(15, geom.toJson());
+				MapGeometry geom = createGeometry(pointElement);
+				msg.setField(15, geom);
 			}
 
 			NodeList details = unpackXML(detail, "eventWrapper");
@@ -502,10 +507,10 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 				}
 				break;
 			case Geometry:
-				Geometry geometry = createGeometry(node);
+				MapGeometry geometry = createGeometry(node);
 				if (geometry != null)
 					fieldGroup.setField(fieldDefinition.getName(),
-							geometry.toJson());
+							geometry);
 				break;
 			case Long:
 				value = getAttribute(node, fieldDefinition.getName());
@@ -839,7 +844,7 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 		}
 	}
 
-	private Geometry createGeometry(Node node) throws Exception {
+	private MapGeometry createGeometry(Node node) throws Exception {
 		try {
 			if (node.getNodeName().equals("point")) {
 
@@ -847,14 +852,19 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 					String lat = getAttribute(node, "lat");
 					String lon = getAttribute(node, "lon");
 					String hae = getAttribute(node, "hae");
+					com.esri.core.geometry.Point pt = new com.esri.core.geometry.Point();
+					SpatialReference srOut = SpatialReference.create(4326);
 					if (!lat.isEmpty() && !lon.isEmpty()) {
 						if (hae.isEmpty())
-							return spatial.createPoint(Double.valueOf(lon),
-									Double.valueOf(lat), GCS_WGS_1984);
+							pt.setXY(Double.valueOf(lon), Double.valueOf(lat));
+							//return spatial.createPoint(Double.valueOf(lon),
+									//Double.valueOf(lat), GCS_WGS_1984);
 						else
-							return spatial.createPoint(Double.valueOf(lon),
-									Double.valueOf(lat), Double.valueOf(hae),
-									GCS_WGS_1984);
+						{
+							pt.setXY(Double.valueOf(lon), Double.valueOf(lat));
+							pt.setZ(Double.valueOf(hae));
+						}
+						return new MapGeometry(pt, srOut);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -897,7 +907,9 @@ public class CoTAdapterInbound extends InboundAdapterBase {
 								+ ",\"spatialReference\":{\"wkid\":"
 								+ GCS_WGS_1984 + "}}";
 						// System.out.println("json string = \""+jsonString+"\"");
-						Geometry geometry = spatial.fromJson(jsonString);
+						JsonFactory jf = new JsonFactory();
+						JsonParser jp = jf.createJsonParser(jsonString);
+						MapGeometry geometry = GeometryEngine.jsonToGeometry(jp);
 						return geometry;
 					}
 				} catch (Exception ex) {

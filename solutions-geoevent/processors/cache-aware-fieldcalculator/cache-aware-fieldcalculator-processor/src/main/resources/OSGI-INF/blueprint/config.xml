@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0" default-activation="eager">
+	
+	<reference id="messagingService" interface="com.esri.ges.messaging.Messaging" timeout="1000"/>
+	<reference id="tagManagerService" interface="com.esri.ges.manager.tag.TagManager" timeout="1000"/>
+	
+	<bean id="cacheAwareFieldCalculatorServiceBean" class="com.esri.geoevent.processor.cacheawarefieldcalculator.CacheAwareFieldCalculatorService" activation="eager">
+		<property name="bundleContext" ref="blueprintBundleContext"/>
+		<property name="messaging" ref="messagingService"/>
+		<property name="tagManager" ref="tagManagerService"/>
+	</bean>
+	
+	<service id="cacheAwareFieldCalculatorService" ref="cacheAwareFieldCalculatorServiceBean" interface="com.esri.ges.processor.GeoEventProcessorService">
+		<service-properties>
+			<entry key="threadSafe" value="false"/>
+		</service-properties>
+	</service>
+	
+</blueprint>

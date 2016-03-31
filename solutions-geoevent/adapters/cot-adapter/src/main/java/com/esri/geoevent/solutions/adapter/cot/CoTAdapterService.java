@@ -51,11 +51,10 @@ import com.esri.ges.core.geoevent.GeoEventDefinition;
 import com.esri.ges.core.property.PropertyDefinition;
 import com.esri.ges.core.property.PropertyException;
 import com.esri.ges.core.property.PropertyType;
-import com.esri.ges.spatial.Spatial;
 
 public class CoTAdapterService extends AdapterDefinitionBase implements AdapterService
 {
-	Spatial spatial;
+
 	String guid;
 	private ArrayList<CoTDetailsDeff> dynamicMessageAttributes;
 	private List<FieldDefinition> fieldDefinitions;

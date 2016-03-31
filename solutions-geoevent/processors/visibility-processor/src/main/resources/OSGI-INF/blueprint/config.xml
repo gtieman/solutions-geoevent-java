@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	default-activation="lazy">
+	<reference id="geoDefManagerService"
+		interface="com.esri.ges.manager.geoeventdefinition.GeoEventDefinitionManager" />
+	<reference id="messagingService" interface="com.esri.ges.messaging.Messaging" />
+
+	<bean id="visibilityProcessorServiceBean"
+		class="com.esri.geoevent.solutions.processor.visibility.VisibilityProcessorService">
+		<property name="bundleContext" ref="blueprintBundleContext" />
+		<property name="manager" ref="geoDefManagerService" />
+		<property name="messaging" ref="messagingService" />
+	</bean>
+
+	<service id="visibilityProcessorService" ref="visibilityProcessorServiceBean"
+		interface="com.esri.ges.processor.GeoEventProcessorService" />
+
+</blueprint>

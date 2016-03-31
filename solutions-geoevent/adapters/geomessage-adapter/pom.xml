@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>com.esri.ges.solutions.adapter</groupId> 
+	<groupId>com.esri.geoevent.solutions.adapter.geomessage</groupId> 
 		
-	<version>10.2.0</version> 
+	<version>10.4.0</version> 
 	
 	<packaging>bundle</packaging>
 	<artifactId>geomessage-adapter</artifactId>
@@ -11,16 +11,22 @@
 	<repositories>
 		<repository>
 			<id>ages-sdk-repo</id>
-			<name>GeoEvent Processor SDK repository</name>						
-			<url>file:///Program Files/ArcGIS/Server/GeoEventProcessor/sdk/repository</url>
-		</repository>	
+			<name>GeoEvent Processor SDK repository</name>
+			<url>file:///Program Files/ArcGIS/Server/GeoEvent/sdk/repository</url>
+		</repository>
+		<repository>
+			<id>GEP</id>
+			<name>GeoEvent Processor embedded repository</name>
+			<layout>default</layout>
+			<url>file:///Program Files/ArcGIS/Server/GeoEvent/System</url>
+		</repository>
 	</repositories>
 		
 	<dependencies>
 		<dependency>
-			<groupId>com.esri.ges.sdk</groupId>
-			<artifactId>ges-lib</artifactId>
-			<version>${project.version}</version>
+			<groupId>com.esri.geoevent.sdk</groupId>
+			<artifactId>geoevent-sdk</artifactId>
+			<version>10.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -28,7 +34,13 @@
 			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+   			<groupId>com.esri.geometry</groupId>
+   			<artifactId>geometry-api</artifactId>
+   			<version>10.4.0</version>
+		</dependency>
 	</dependencies>
+	
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -36,8 +48,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -53,9 +65,9 @@
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-ContactAddress>geoeventprocessor@esri.com</Bundle-ContactAddress>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<AGES-Domain>com.esri.ges.solutions.adapter</AGES-Domain>
+						<AGES-Domain>com.esri.geoevent.solutions.adapter</AGES-Domain>
 						<Export-Package/>
-						<Private-Package>com.esri.ges.solutions.adapter.geomessage</Private-Package>
+						<Private-Package>com.esri.geoevent.solutions.adapter.geomessage</Private-Package>
 					</instructions>
 				</configuration>
 			</plugin>

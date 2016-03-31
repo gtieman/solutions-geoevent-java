@@ -101,33 +101,46 @@ public class MessageParser extends DefaultHandler {
 			} else if (qName.equalsIgnoreCase("event")) {
 				// Event element was found. Store all available CoT attributes.
 				for (int i = 0; attributes.getLength() > i; i++) {
-					if (attributes.getLocalName(i).equalsIgnoreCase("how")) {
+					String l = attributes.getLocalName(i);
+					String q = attributes.getQName(i);
+					String name = null;
+					
+					if(l.isEmpty())
+					{
+						name = q;
+					}
+					else
+					{
+						name = l;
+					}
+					
+					if (name.equalsIgnoreCase("how")) {
 						this.how = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"opex")) {
 						this.opex = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"qos")) {
 						this.qos = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"type")) {
 						this.type = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"uid")) {
 						this.uid = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"stale")) {
 						this.stale = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"start")) {
 						this.start = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"time")) {
 						this.time = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"version")) {
 						this.version = attributes.getValue(i);
-					} else if (attributes.getLocalName(i).equalsIgnoreCase(
+					} else if (name.equalsIgnoreCase(
 							"access")) {
 						this.access = attributes.getValue(i);
 					}
@@ -141,6 +154,7 @@ public class MessageParser extends DefaultHandler {
 				// (NOTE: detail should NOT have any attributes but search just
 				// in case)
 				for (int i = 0; attributes.getLength() > i; i++) {
+					
 					detail.append("\n" + makeTabs(tabLevel + 1)
 							+ attributes.getLocalName(i) + "=" + "\""
 							+ attributes.getValue(i) + "\"");
@@ -153,8 +167,20 @@ public class MessageParser extends DefaultHandler {
 				detail.append("\n" + makeTabs(tabLevel) + "<" + qName);
 				// search for any attributes
 				for (int i = 0; attributes.getLength() > i; i++) {
+					String l = attributes.getLocalName(i);
+					String q = attributes.getQName(i);
+					String name = null;
+					
+					if(l.isEmpty())
+					{
+						name = q;
+					}
+					else
+					{
+						name = l;
+					}
 					detail.append("\n" + makeTabs(tabLevel + 1)
-							+ attributes.getLocalName(i) + "=" + "\""
+							+ name + "=" + "\""
 							+ attributes.getValue(i) + "\"");
 				}
 				// close the tag
@@ -165,8 +191,20 @@ public class MessageParser extends DefaultHandler {
 				point.append("\n" + makeTabs(tabLevel) + "<point");
 				// search for any attributes
 				for (int i = 0; attributes.getLength() > i; i++) {
+					String l = attributes.getLocalName(i);
+					String q = attributes.getQName(i);
+					String name = null;
+					
+					if(l.isEmpty())
+					{
+						name = q;
+					}
+					else
+					{
+						name = l;
+					}
 					point.append("\n" + makeTabs(tabLevel + 1)
-							+ attributes.getLocalName(i) + "=" + "\""
+							+ name + "=" + "\""
 							+ attributes.getValue(i) + "\"");
 				}
 				// close the tag

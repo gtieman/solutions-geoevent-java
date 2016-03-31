@@ -53,6 +53,7 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
+import org.codehaus.jackson.JsonParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -61,6 +62,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.esri.core.geometry.Geometry;
+import com.esri.core.geometry.GeometryEngine;
+import com.esri.core.geometry.MapGeometry;
+import com.esri.core.geometry.SpatialReference;
 import com.esri.ges.adapter.AdapterDefinition;
 import com.esri.ges.adapter.InboundAdapterBase;
 import com.esri.ges.core.ConfigurationException;
@@ -72,7 +77,7 @@ import com.esri.ges.core.geoevent.FieldType;
 import com.esri.ges.core.geoevent.GeoEvent;
 import com.esri.ges.core.geoevent.GeoEventDefinition;
 import com.esri.ges.core.property.Property;
-import com.esri.ges.spatial.Geometry;
+import com.esri.core.geometry.Point;
 
 public class CoTAdapter extends InboundAdapterBase
 {
@@ -283,8 +288,9 @@ public class CoTAdapter extends InboundAdapterBase
 					if (points.getLength() > 0)
 					{
 						Element pointElement = (Element) points.item(0);
-						Geometry geom = createGeometry(pointElement);
-						msg.setField( 15, geom.toJson() );
+						MapGeometry geom = createGeometry(pointElement);
+						msg.setField(15, geom);
+						//msg.setField( 15, geom.toJson() );
 					}
 
 					GeoEventDefinition ged = msg.getGeoEventDefinition();
@@ -374,9 +380,9 @@ public class CoTAdapter extends InboundAdapterBase
 			}
 			break;
 		case Geometry:
-			Geometry geometry = createGeometry(node);
+			MapGeometry geometry = createGeometry(node);
 			if( geometry != null )
-				fieldGroup.setField(fieldDefinition.getName(), geometry.toJson());
+				fieldGroup.setField(fieldDefinition.getName(), geometry);
 			break;
 		case Long:
 			value = getAttribute( node, fieldDefinition.getName() );
@@ -675,25 +681,32 @@ public class CoTAdapter extends InboundAdapterBase
 		return sb.toString();
 	}
 
-	private Geometry createGeometry(Node node)
+	private MapGeometry createGeometry(Node node)
 	{
 		if( node.getNodeName().equals("point") )
 		{
 			String lat = getAttribute(node,"lat");
-			String lon = getAttribute(node,"lon");
-			String hae = getAttribute(node,"hae");
+			String lon = getAttribute(node, "lon");
+			String hae = getAttribute(node, "hae");
+			Point pt = new Point();
 			if (!lat.isEmpty() && !lon.isEmpty()) {
-				if (hae.isEmpty())
-					return spatial.createPoint(
-							Double.valueOf(lon),
-							Double.valueOf(lat),
-							GCS_WGS_1984);
-				else
-					return spatial.createPoint(
-							Double.valueOf(lon),
-							Double.valueOf(lat),
-							Double.valueOf(hae),
-							GCS_WGS_1984);
+				if (hae.isEmpty()) {
+					// SpatialReference sr =
+					pt.setX(Double.valueOf(lon));
+					pt.setY(Double.valueOf(lat));
+					SpatialReference srOut = SpatialReference.create(4326);
+					MapGeometry mapGeo = new MapGeometry(pt, srOut);
+					return mapGeo;
+
+				} else {
+					pt.setX(Double.valueOf(lon));
+					pt.setY(Double.valueOf(lat));
+					pt.setZ(Double.valueOf(hae));
+					SpatialReference srOut = SpatialReference.create(4326);
+					MapGeometry mapGeo = new MapGeometry(pt, srOut);
+					return mapGeo;
+				}
+
 			}
 		}
 
@@ -731,7 +744,10 @@ public class CoTAdapter extends InboundAdapterBase
 					String geometryString = closePolygon();
 					String jsonString = geometryString.substring(0, geometryString.length()-1) + ",\"spatialReference\":{\"wkid\":"+GCS_WGS_1984+"}}";
 					//System.out.println("json string = \""+jsonString+"\"");
-					Geometry geometry = spatial.fromJson(jsonString);
+					JsonFactory jf = new JsonFactory();
+					JsonParser jp = jf.createJsonParser(jsonString);
+					MapGeometry geometry = GeometryEngine.jsonToGeometry(jp);
+					//Geometry geometry = spatial.fromJson(jsonString);
 					return geometry;
 				}
 			}catch(Exception ex)

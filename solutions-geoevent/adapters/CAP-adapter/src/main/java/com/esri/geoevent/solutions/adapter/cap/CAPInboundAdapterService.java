@@ -24,7 +24,8 @@ public class CAPInboundAdapterService extends AdapterServiceBase
 {
 	public CAPInboundAdapterService()
 	{	
-		definition = new XmlAdapterDefinition(getResourceAsStream("cap-inbound-adapter-definition.xml"));		
+		definition = new XmlAdapterDefinition(getResourceAsStream("cap-inbound-adapter-definition.xml"));
+		String test = "hi";
 	}
 	
 	@Override

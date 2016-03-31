@@ -165,9 +165,8 @@ public class CoTAdapterOutbound extends OutboundAdapterBase {
 			xmlResult=fixEscapeCharacters(myResult.toString());
 			System.out.println("**** XML RESULTS ***");
 			System.out.println(xmlResult);
-			
-			this.byteListener.receive(ByteBuffer.wrap(xmlResult.getBytes()), "");
-
+			//this.byteListener.receive(ByteBuffer.wrap(xmlResult.getBytes()), "");
+			super.receive(ByteBuffer.wrap(xmlResult.getBytes()), "", geoEvent);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,11 +225,11 @@ public class CoTAdapterOutbound extends OutboundAdapterBase {
 	
 	private Point pointFromJson(Object value) {
 		//JSONObject json = (JSONObject) JSONSerializer.toJSON( jsonTxt );
-		if(value instanceof com.esri.ges.spatial.Point)
-		{
-			com.esri.ges.spatial.Point p = (com.esri.ges.spatial.Point)value;
+		//if(value instanceof com.esri.ges.spatial.Point)
+		//{
+			//com.esri.ges.spatial.Point p = (com.esri.ges.spatial.Point)value;
 			
-		}
+		//}
 		Point point=new Point();
 		JsonFactory jf= new JsonFactory();
 		try {

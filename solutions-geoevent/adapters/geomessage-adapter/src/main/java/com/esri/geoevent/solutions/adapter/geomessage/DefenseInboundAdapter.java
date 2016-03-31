@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -28,8 +30,12 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.joda.time.DateTime;
 import org.xml.sax.SAXException;
 
+import com.esri.core.geometry.MapGeometry;
+import com.esri.core.geometry.Point;
+import com.esri.core.geometry.SpatialReference;
 import com.esri.ges.adapter.AdapterDefinition;
 import com.esri.ges.adapter.InboundAdapterBase;
 import com.esri.ges.core.component.ComponentException;
@@ -37,7 +43,6 @@ import com.esri.ges.core.geoevent.FieldDefinition;
 import com.esri.ges.core.geoevent.GeoEvent;
 import com.esri.ges.core.geoevent.GeoEventDefinition;
 import com.esri.ges.messaging.MessagingException;
-import com.esri.ges.spatial.Point;
 import com.esri.ges.util.DateUtil;
 
 public class DefenseInboundAdapter extends InboundAdapterBase
@@ -160,8 +165,8 @@ public class DefenseInboundAdapter extends InboundAdapterBase
 							geoEvent.setField(fieldName, Double.parseDouble(fieldValue));
 							break;
 						case Float:
-              geoEvent.setField(fieldName, Float.parseFloat(fieldValue));
-              break;
+							geoEvent.setField(fieldName, Float.parseFloat(fieldValue));
+							break;
 						case Boolean:
 							geoEvent.setField(fieldName, Boolean.parseBoolean(fieldValue));
 							break;
@@ -182,10 +187,34 @@ public class DefenseInboundAdapter extends InboundAdapterBase
 							if (g.length > 2)
 								z = Double.parseDouble(g[2]);
 							int wkid = Integer.parseInt(fields.get("_wkid"));
-							Point point = spatial.createPoint(x, y, z, wkid);
-							int geometryID = geoEvent.getGeoEventDefinition().getGeometryId();
-							geoEvent.setField(geometryID, point.toJson());
+							//Point point = spatial.createPoint(x, y, z, wkid);
+							Point point = new Point(x, y, z);
+							SpatialReference sref = SpatialReference.create(wkid);
+							MapGeometry mapGeo = new MapGeometry(point, sref);
+							//int geometryID = geoEvent.getGeoEventDefinition().getGeometryId();
+							geoEvent.setGeometry(mapGeo);
 							break;
+						}
+						List<FieldDefinition> fdefs = geoEvent.getGeoEventDefinition().getFieldDefinitions();
+						Boolean hasStartTime = false;
+						for(FieldDefinition fd: fdefs)
+						{
+							List<String>tags = fd.getTags();
+							if(!tags.isEmpty())
+							{
+								if(tags.contains("TIME_START"))
+								{
+									hasStartTime=true;
+									break;
+								}
+							}
+						}
+						if (hasStartTime) {
+							if (geoEvent.getField("TIME_START") == null) {
+								long currentTime = System.currentTimeMillis();
+								Date time = new Date(currentTime);
+								geoEvent.setField("TIME_START", time);
+							}
 						}
 					}
 					catch (Exception ex)

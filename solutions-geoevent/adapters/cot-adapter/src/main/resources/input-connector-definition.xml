@@ -2,9 +2,9 @@
 	type="inbound">
 	<description>Receive Cursor on Target messages</description>
 	<defaultName>cot-in</defaultName>
-	<transport uri="com.esri.ges.transport.inbound/HTTP/10.2.0" />
+	<transport uri="com.esri.ges.transport.inbound/HTTP/10.3.1" />
 	<adapter
-		uri="com.esri.geoevent.solutions.adapter.cot.inbound/CursorOnTargetIn/10.2.0" />
+		uri="com.esri.geoevent.solutions.adapter.cot.inbound/CursorOnTargetIn/10.3.1" />
 	<properties>
 		<shown>
 			<property name="XSD_Path" label="XSD_Path" source="adapter"

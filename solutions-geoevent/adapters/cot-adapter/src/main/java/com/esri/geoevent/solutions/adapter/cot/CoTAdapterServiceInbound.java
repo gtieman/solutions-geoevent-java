@@ -34,11 +34,11 @@ import com.esri.ges.core.ConfigurationException;
 import com.esri.ges.core.component.ComponentException;
 import com.esri.ges.core.geoevent.FieldDefinition;
 import com.esri.ges.manager.geoeventdefinition.GeoEventDefinitionManager;
-import com.esri.ges.spatial.Spatial;
+
 
 public class CoTAdapterServiceInbound extends AdapterServiceBase
 {
-	Spatial spatial;
+	
 	String guid;
 	GeoEventDefinitionManager geoEventDefManager;
 	private ArrayList<CoTDetailsDeff> dynamicMessageAttributes;

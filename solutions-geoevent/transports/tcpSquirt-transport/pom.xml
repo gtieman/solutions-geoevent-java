@@ -7,22 +7,33 @@
 	<packaging>bundle</packaging>
 	<groupId>com.esri.geoevent.solutions.transport.tcpsquirt</groupId>
 	<artifactId>tcpsquirt-transport</artifactId>
-	<version>10.2.0</version>
+	<version>10.4.0</version>
 	<name>Esri :: AGES :: Transport :: TCPSQUIRT</name>
+	<properties>
+		<contact.address>geoevent@esri.com</contact.address>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.bundle.plugin.version>2.3.6</maven.bundle.plugin.version>
+		<junit.version>4.8.1</junit.version>
+		<jackson.version>1.9.5</jackson.version>
+	</properties>
 	<repositories>
+		<repository>
+			<id>ages-sdk-repo</id>
+			<name>GeoEvent Processor SDK repository</name>
+			<url>file:///Program Files/ArcGIS/Server/GeoEvent/sdk/repository</url>
+		</repository>
 		<repository>
 			<id>GEP</id>
 			<name>GeoEvent Processor embedded repository</name>
 			<layout>default</layout>
-			<url>file:///Program Files/ArcGIS/Server/GeoEventProcessor/System</url>
+			<url>file:///Program Files/ArcGIS/Server/GeoEvent/System</url>
 		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.esri.geoevent.sdk</groupId>
 			<artifactId>geoevent-sdk</artifactId>
-			<version>10.2.0</version>
-			<scope>provided</scope>
+			<version>10.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
@@ -39,6 +50,46 @@
 	</dependencies>
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.m2e</groupId>
+				<artifactId>lifecycle-mapping</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>
+										org.codehaus.mojo
+									</groupId>
+									<artifactId>
+										license-maven-plugin
+									</artifactId>
+									<versionRange>
+										[1.5,)
+									</versionRange>
+									<goals>
+										<goal>
+											update-file-header
+										</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore></ignore>
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>

@@ -39,31 +39,31 @@ public class SymbolNameToIdProcessorDefinition extends GeoEventProcessorDefiniti
 	public void setManager(GeoEventDefinitionManager m) throws PropertyException {
 		this.manager = m;
 				
-		PropertyDefinition procSymbolNameSource = new PropertyDefinition("symbolNameSource", 
+		/*PropertyDefinition procSymbolNameSource = new PropertyDefinition("symbolNameSource", 
 				PropertyType.String, "", "SymbolName Source", "Source of SymbolName Value", true, false);
 		procSymbolNameSource.addAllowedValue("Event");
-		propertyDefinitions.put(procSymbolNameSource.getPropertyName(), procSymbolNameSource);
+		propertyDefinitions.put(procSymbolNameSource.getPropertyName(), procSymbolNameSource);*/
 		
 		PropertyDefinition procSymbolNameEvent = new PropertyDefinition("symbolNameEvent", 
-				PropertyType.String, "", "SymbolName Event Field", "Geoevent field containing SymbolName data", true, false);
-		procSymbolNameEvent.setDependsOn("symbolNameSource=Event");
-		SetGeoEventAllowedFields(procSymbolNameEvent);
+				PropertyType.String, "", "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.LBL_SYMBOL_NAME_FIELD}", "${com.esri.geoevent.solutions.processor.geomessage.geomessage-processor.DESC_SYMBOL_NAME_FIELD}", true, false);
+		//procSymbolNameEvent.setDependsOn("symbolNameSource=Event");
+		//SetGeoEventAllowedFields(procSymbolNameEvent);
 		propertyDefinitions.put(procSymbolNameEvent.getPropertyName(), procSymbolNameEvent);
 		
-		PropertyDefinition procSymbolIdSource = new PropertyDefinition("symbolIdSource", 
+		/*PropertyDefinition procSymbolIdSource = new PropertyDefinition("symbolIdSource", 
 				PropertyType.String, "", "SymbolId Source", "Source of SymbolId Value", true, false);
 		procSymbolIdSource.addAllowedValue("Event");
-		propertyDefinitions.put(procSymbolIdSource.getPropertyName(), procSymbolIdSource);
+		propertyDefinitions.put(procSymbolIdSource.getPropertyName(), procSymbolIdSource);*/
 		
 		PropertyDefinition procSymbolIdEvent = new PropertyDefinition("symbolIdEvent", 
-				PropertyType.String, "", "SymbolId Event Field", "Geoevent field containing SymbolId data", true, false);
-		procSymbolIdEvent.setDependsOn("symbolIdSource=Event");
-		SetGeoEventAllowedFields(procSymbolIdEvent);
+				PropertyType.String, "", "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.LBL_SYMBOL_ID_FIELD}", "${com.esri.geoevent.solutions.processor.geomessage.geomessage-processor.DESC_SYMBOL_ID_FIELD}", true, false);
+		//procSymbolIdEvent.setDependsOn("symbolIdSource=Event");
+		//SetGeoEventAllowedFields(procSymbolIdEvent);
 		propertyDefinitions.put(procSymbolIdEvent.getPropertyName(), procSymbolIdEvent);
 		
 	}	
 	
-	private void SetGeoEventAllowedFields(PropertyDefinition pd)
+	/*private void SetGeoEventAllowedFields(PropertyDefinition pd)
 	{
 		if (this.manager == null)
 			return;
@@ -91,7 +91,7 @@ public class SymbolNameToIdProcessorDefinition extends GeoEventProcessorDefiniti
 				}
 			}
 		}
-	}
+	}*/
 	
 	@Override
 	public String getName()
@@ -102,25 +102,25 @@ public class SymbolNameToIdProcessorDefinition extends GeoEventProcessorDefiniti
 	@Override
 	public String getDomain()
 	{
-		return "com.esri.geoevent.solutions.processor.symbollookup";
+		return "com.esri.geoevent.solutions.processor.symbol-lookup";
 	}
 
 	@Override
 	public String getVersion()
 	{
-		return "10.2.0";
+		return "10.4.0";
 	}
 
 	@Override
 	public String getLabel()
 	{
-		return "Symbol Name To Id Processor";
+		return  "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.NAME_TO_SYMBOL_PROCESSOR_LABEL}";
 	}
 
 	@Override
 	public String getDescription()
 	{
-		return "Converts well known symbol names to Symbol ID Codes (SIDCs).";
+		return "${com.esri.geoevent.solutions.processor.symbol-lookup.symbol-lookup-processor.NAME_TO_SYMBOL_PROCESSOR_DESCRIPTION}";
 	}
 
 	@Override
